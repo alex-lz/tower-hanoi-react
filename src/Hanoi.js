@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const apiUrl = 'http://localhost:8083';
@@ -41,10 +40,16 @@ class Hanoi extends Component {
             this.setState({error});
         }
     )
-}
+  }
+
+  async simulation(n) {
+    let f = document.getElementById('t1');
+    f.style.transform = 'translateY('+(-30)+'vmin)';
+    f.style.transform += 'translateX('+(60)+'vmin)'; 
+  }
 
   render() {
-    const {movements, isLoading} = this.state;
+    const {movements, disks, isLoading} = this.state;
 
     if (isLoading) {
       return <p>Loading...</p>;
@@ -54,13 +59,14 @@ class Hanoi extends Component {
       <tr key={"hanoi_0"}>
         <td>
         <input
-          type="number"
+          type="text"
           name="disks"
           placeholder="Type here to play!"
           value={this.state.disks}
           onChange={this.onHandleChange}
         />
         </td>
+        <td style={{width: '10px'}}></td>
         <td>
           <ButtonGroup>
             <Button 
@@ -68,25 +74,49 @@ class Hanoi extends Component {
               color="primary" 
               onClick={() => this.play(this.state.disks)}
             >Play</Button>
+            <Button 
+              size="sm" 
+              color="success" 
+              onClick={() => this.simulation(this.state.disks)}
+            >Simulation</Button>
           </ButtonGroup>
         </td>
       </tr>;
 
-const Moves = movements.map(move => {
-  return <tr key={move.disk+move.source+move.destinacion}>
-    <td style={{whiteSpace: 'nowrap'}}>{move.disk}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{move.source}</td>
-    <td style={{whiteSpace: 'nowrap'}}>{move.destinacion}</td>
-  </tr>
-      
-    });
+    const Hanoi = <form>
+      <div className="discs">
+        {disks >= 1 ? <div id="t1" class="disc one"></div>: null}
+        {disks >= 2 ? <div id="t2" class="disc two"></div>: null}
+        {disks >= 3 ? <div id="t3" class="disc three"></div>: null}
+        {disks >= 4 ? <div id="t4" class="disc four"></div>: null}
+        {disks >= 5 ? <div id="t5" class="disc five"></div>: null}
+        {disks >= 6 ? <div id="t6" class="disc six"></div>: null}
+
+        <div class="tower a"></div>
+        <div class="tower b"></div>
+        <div class="tower c"></div>
+      </div>
+      <div class="bottom"></div>
+    </form>
+   
+
+    const Moves = movements.map(move => {
+      return <tr key={move.disk+move.source+move.destinacion}>
+        <td style={{whiteSpace: 'nowrap'}}>{move.disk}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{move.source}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{move.destinacion}</td>
+      </tr>
+    })
 
     return (
       <div>
         <AppNavbar/>
-        <Container fluid>
+        <Container style={{maxWidth: '1600px'}}fluid>
           <h3>Tower of Hanoi</h3>
           {Controls}
+          {Hanoi}
+          <br />
+          <h4>Movements</h4>
           <Table className="mt-4">
             <thead>
             <tr>
