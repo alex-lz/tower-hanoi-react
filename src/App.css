@@ -40,7 +40,7 @@ input[type=text] {
   border-radius: 5px;
 }
 
-/* Discs */
+/* Discs styles */
 .discs {
   position: relative;
   display: flex;
@@ -90,13 +90,7 @@ input[type=text] {
   background: linear-gradient(to right, #f2a097, #ff3a24, #e74c3c);
 }
 
-/* Transitions */
-
-#t1, #t2, #t3, #t4, #t5, #t6 {
-  transition: transform 1s;
-}
-
-/* Towers */
+/* Towers styles*/
 .tower {
   position: absolute;
   top: 7.5vmin;

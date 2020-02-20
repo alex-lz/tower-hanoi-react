@@ -10,25 +10,48 @@ class Hanoi extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error:null, 
       movements: [], 
+      response: {},
+      error:null,
       disks: '',
-      regexp: /^[0-9\b]+$/,
-      response: {}, 
+      i:0,
+      towerA: 0,
+      towerB: 0,
+      towerC: 0,
       isLoading: false
     };
   }
 
   onHandleChange = e => {
     let number = e.target.value;
-    if(number === '' || this.state.regexp.test(number)) {
+    let regexp = /^[0-9\b]+$/;
+
+    if(regexp.test(number)) {
+      this.setState({ [e.target.name]: number})
+      this.setState({ towerA: number})
+    } 
+    if(number === '') {
+      this.clear()
       this.setState({ [e.target.name]: number})
     }
+  }
 
+  clear() {
+    this.setState({
+      movements: [], 
+      response: {},
+      error:null,
+      disks: '',
+      i:0,
+      towerA: 0,
+      towerB: 0,
+      towerC: 0,
+      isLoading: false
+    })
   }
 
   async play(n){
-  this.setState({isLoading: true});
+  this.setState({i:0,isLoading: true});
 
    axios.get(apiUrl + `/disks/${n}`).then(response => response.data).then(
         (result)=>{
@@ -37,19 +60,80 @@ class Hanoi extends Component {
             });
         },
         (error)=>{
-            this.setState({error});
+            this.setState({error, isLoading: false});
         }
     )
   }
 
+  moveDisk(disk, from, to) {
+    let element = document.getElementById('t'+disk);
+    element.style.transition = 'transform 1s';
+
+    switch(from + to) {
+      case 'AB':
+        element.style.transform = 'translateX('+(30)+'vmin)';
+        break;
+      case 'AC':
+        element.style.transform = 'translateX('+(60)+'vmin)';
+        break;
+      case 'BA':
+        element.style.transform = 'translateX('+(0)+'vmin)';
+        break;
+      case 'BC':
+        element.style.transform = 'translateX('+(60)+'vmin)';
+        break;
+      case 'CA':
+        element.style.transform = 'translateX('+(0)+'vmin)';
+        break;
+      case 'CB':
+        element.style.transform = 'translateX('+(30)+'vmin)';
+        break;
+      default:
+        // code block
+    }
+  }
+
   async simulation(n) {
-    let f = document.getElementById('t1');
-    f.style.transform = 'translateY('+(-30)+'vmin)';
-    f.style.transform += 'translateX('+(60)+'vmin)'; 
+    let m = this.state.movements
+    let i = this.state.i
+    
+    this.moveDisk(m[i].disk, m[i].source, m[i].destination)
+    this.towerCounter(m[i].source, m[i].destination)
+    this.setState({ i: i + 1 });
+  }
+
+  towerCounter(from, to) {
+    const { towerA, towerB, towerC } = this.state
+      switch(from) {
+        case 'A':
+          this.setState({ towerA: towerA - 1})
+          break;
+        case 'B':
+          this.setState({ towerB: towerB - 1})
+          break;
+        case 'C':
+          this.setState({ towerC: towerC - 1})
+          break;
+        default:
+          // code block
+      }
+      switch(to) {
+        case 'A':
+          this.setState({ towerA: towerA + 1})
+          break;
+        case 'B':
+          this.setState({ towerB: towerB + 1})
+          break;
+        case 'C':
+          this.setState({ towerC: towerC + 1})
+          break;
+        default:
+          // code block
+      }
   }
 
   render() {
-    const {movements, disks, isLoading} = this.state;
+    const {movements, disks, i, isLoading} = this.state;
 
     if (isLoading) {
       return <p>Loading...</p>;
@@ -62,7 +146,7 @@ class Hanoi extends Component {
           type="text"
           name="disks"
           placeholder="Type here to play!"
-          value={this.state.disks}
+          value={disks}
           onChange={this.onHandleChange}
         />
         </td>
@@ -72,12 +156,13 @@ class Hanoi extends Component {
             <Button 
               size="sm" 
               color="primary" 
-              onClick={() => this.play(this.state.disks)}
+              onClick={() => this.play(disks)}
             >Play</Button>
             <Button 
               size="sm" 
               color="success" 
-              onClick={() => this.simulation(this.state.disks)}
+              onClick={() => this.simulation(disks)}
+              disabled={i === movements.length ? true : false}
             >Simulation</Button>
           </ButtonGroup>
         </td>
@@ -85,26 +170,29 @@ class Hanoi extends Component {
 
     const Hanoi = <form>
       <div className="discs">
-        {disks >= 1 ? <div id="t1" class="disc one"></div>: null}
-        {disks >= 2 ? <div id="t2" class="disc two"></div>: null}
-        {disks >= 3 ? <div id="t3" class="disc three"></div>: null}
-        {disks >= 4 ? <div id="t4" class="disc four"></div>: null}
-        {disks >= 5 ? <div id="t5" class="disc five"></div>: null}
-        {disks >= 6 ? <div id="t6" class="disc six"></div>: null}
+        {disks >= 1 ? <div id="t1" className="disc one"></div>: null}
+        {disks >= 2 ? <div id="t2" className="disc two"></div>: null}
+        {disks >= 3 ? <div id="t3" className="disc three"></div>: null}
+        {disks >= 4 ? <div id="t4" className="disc four"></div>: null}
+        {disks >= 5 ? <div id="t5" className="disc five"></div>: null}
+        {disks >= 6 ? <div id="t6" className="disc six"></div>: null}
 
-        <div class="tower a"></div>
-        <div class="tower b"></div>
-        <div class="tower c"></div>
+        <div className="tower a"></div>
+        <div className="tower b"></div>
+        <div className="tower c"></div>
       </div>
-      <div class="bottom"></div>
+      <div className="bottom"></div>
     </form>
    
 
-    const Moves = movements.map(move => {
-      return <tr key={move.disk+move.source+move.destinacion}>
+    const Moves = movements.map((move, index) => {
+      return <tr key={index}>
         <td style={{whiteSpace: 'nowrap'}}>{move.disk}</td>
         <td style={{whiteSpace: 'nowrap'}}>{move.source}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{move.destinacion}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{move.destination}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{move.towerA}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{move.towerB}</td>
+        <td style={{whiteSpace: 'nowrap'}}>{move.towerC}</td>
       </tr>
     })
 
@@ -113,7 +201,7 @@ class Hanoi extends Component {
         <AppNavbar/>
         <Container style={{maxWidth: '1600px'}}fluid>
           <h3>Tower of Hanoi</h3>
-          {Controls}
+          <table><tbody>{Controls}</tbody></table>
           {Hanoi}
           <br />
           <h4>Movements</h4>
@@ -123,6 +211,9 @@ class Hanoi extends Component {
               <th width="15%">Number of disk</th>
               <th width="15%">Source</th>
               <th width="15%">Destination</th>
+              <th width="15%">Tower A</th>
+              <th width="15%">Tower B</th>
+              <th width="15%">Tower C</th>
             </tr>
             </thead>
             <tbody>
