@@ -90,7 +90,7 @@ input[type=text] {
   background: linear-gradient(to right, #f2a097, #ff3a24, #e74c3c);
 }
 
-/* Towers styles*/
+/* Towers styles */
 .tower {
   position: absolute;
   top: 7.5vmin;
@@ -118,6 +118,102 @@ input[type=text] {
   height: 7.5vmin;
   background: linear-gradient(to right, rgba(255, 255, 255, 0.3), transparent),
   linear-gradient(#b27315, #966f33 13%, #faddb0 14.5%, #faddb0 27.5%, #966f33 29%, #966f33 42%, #faddb0 43.5%, #d7b889 56.5%, #966f33 58%, #966f33 71%, #d7b889 72.5%, #d7b889 85.5%, #966f33 87%, #b27315);
+}
+
+/* Movement animation from A to B */
+@keyframes moveAB {
+  0% {
+    transform: translate(0vmin,0vmin)
+  }
+  33% {
+    transform: translate(0vmin,-30vmin)
+  }
+  66% {
+    transform: translate(30vmin,-30vmin)
+  }
+  100% {
+    transform: translate(30vmin,0vmin)
+  }
+}
+
+/* Movement animation from A to C */
+@keyframes moveAC {
+  0% {
+    transform: translate(0vmin,0vmin)
+  }
+  33% {
+    transform: translate(0vmin,-30vmin)
+  }
+  66% {
+    transform: translate(60vmin,-30vmin)
+  }
+  100% {
+    transform: translate(60vmin,0vmin)
+  }
+}
+
+/* Movement animation from B to A */
+@keyframes moveBA {
+  0% {
+    transform: translate(30vmin,0vmin)
+  }
+  33% {
+    transform: translate(30vmin,-30vmin)
+  }
+  66% {
+    transform: translate(0vmin,-30vmin)
+  }
+  100% {
+    transform: translate(0vmin,0vmin)
+  }
+}
+
+/* Movement animation from B to C */
+@keyframes moveBC {
+  0% {
+    transform: translate(30vmin,0vmin)
+  }
+  33% {
+    transform: translate(30vmin,-30vmin)
+  }
+  66% {
+    transform: translate(60vmin,-30vmin)
+  }
+  100% {
+    transform: translate(60vmin,0vmin)
+  }
+}
+
+/* Movement animation from C to A */
+@keyframes moveCA {
+  0% {
+    transform: translate(60vmin,0vmin)
+  }
+  33% {
+    transform: translate(60vmin,-30vmin)
+  }
+  66% {
+    transform: translate(0vmin,-30vmin)
+  }
+  100% {
+    transform: translate(0vmin,0vmin)
+  }
+}
+
+/* Movement animation from C to B */
+@keyframes moveCB {
+  0% {
+    transform: translate(60vmin,0vmin)
+  }
+  33% {
+    transform: translate(60vmin,-30vmin)
+  }
+  66% {
+    transform: translate(30vmin,-30vmin)
+  }
+  100% {
+    transform: translate(30vmin,0vmin)
+  }
 }
 
 @keyframes App-logo-spin {

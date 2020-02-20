@@ -93,11 +93,39 @@ class Hanoi extends Component {
     }
   }
 
+  moveDiskAnimation(disk, from, to) {
+    let element = document.getElementById('t'+disk);
+    
+    element.style.animation = 'move'+from+to+' 3s';
+
+    switch(from + to) {
+      case 'AB':
+        element.style.transform = 'translate(30vmin,0vmin)';
+        break;
+      case 'AC':
+        element.style.transform = 'translate(60vmin,0vmin) ';
+        break;
+      case 'BA':
+        element.style.transform = 'translate(0vmin,0vmin) ';
+        break;
+      case 'BC':
+        element.style.transform = 'translate(60vmin,0vmin) ';
+        break;
+      case 'CA':
+        element.style.transform = 'translate(0vmin,0vmin) ';
+        break;
+      case 'CB':
+        element.style.transform = 'translate(30vmin,0vmin) ';
+        break;
+    }
+  }
+
   async simulation(n) {
     let m = this.state.movements
     let i = this.state.i
-    
-    this.moveDisk(m[i].disk, m[i].source, m[i].destination)
+   
+    this.moveDiskAnimation(m[i].disk, m[i].source, m[i].destination)
+    // this.moveDisk(m[i].disk, m[i].source, m[i].destination)
     this.towerCounter(m[i].source, m[i].destination)
     this.setState({ i: i + 1 });
   }
@@ -133,7 +161,7 @@ class Hanoi extends Component {
   }
 
   render() {
-    const {movements, disks, i, isLoading} = this.state;
+    const {movements, disks, i, towerA, towerB, towerC, isLoading} = this.state;
 
     if (isLoading) {
       return <p>Loading...</p>;
@@ -166,6 +194,10 @@ class Hanoi extends Component {
             >Simulation</Button>
           </ButtonGroup>
         </td>
+        <td style={{width: '50px'}}></td>
+        <td>Tower A( {towerA} )</td>
+        <td>Tower B( {towerB} )</td>
+        <td>Tower C( {towerC} )</td>
       </tr>;
 
     const Hanoi = <form>
@@ -190,9 +222,6 @@ class Hanoi extends Component {
         <td style={{whiteSpace: 'nowrap'}}>{move.disk}</td>
         <td style={{whiteSpace: 'nowrap'}}>{move.source}</td>
         <td style={{whiteSpace: 'nowrap'}}>{move.destination}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{move.towerA}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{move.towerB}</td>
-        <td style={{whiteSpace: 'nowrap'}}>{move.towerC}</td>
       </tr>
     })
 
@@ -211,9 +240,6 @@ class Hanoi extends Component {
               <th width="15%">Number of disk</th>
               <th width="15%">Source</th>
               <th width="15%">Destination</th>
-              <th width="15%">Tower A</th>
-              <th width="15%">Tower B</th>
-              <th width="15%">Tower C</th>
             </tr>
             </thead>
             <tbody>
