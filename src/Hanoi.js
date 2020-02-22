@@ -67,7 +67,7 @@ class Hanoi extends Component {
 
   moveDisk(disk, from, to) {
     let element = document.getElementById('t'+disk);
-    element.style.transition = 'transform 1s';
+    element.style.transition = 'transform 3s';
 
     switch(from + to) {
       case 'AB':
@@ -93,30 +93,144 @@ class Hanoi extends Component {
     }
   }
 
-  moveDiskAnimation(disk, from, to) {
-    let element = document.getElementById('t'+disk);
-    
-    element.style.animation = 'move'+from+to+' 3s';
+  style(from, to, TA, TB, TC) {
 
     switch(from + to) {
       case 'AB':
-        element.style.transform = 'translate(30vmin,0vmin)';
+        return `
+        @keyframes move${from+to} {
+          0% {
+            transform: translate(0vmin,${0}vmin)
+          }
+          33% {
+            transform: translate(0vmin,${-34+TA}vmin)
+          }
+          66% {
+            transform: translate(30vmin,${-34+TA}vmin)
+          }
+          100% {
+            transform: translate(30vmin,${TB}vmin)
+          }
+        }`;
+      case 'AC':
+        return `
+        @keyframes move${from+to} {
+          0% {
+            transform: translate(0vmin,${0}vmin)
+          }
+          33% {
+            transform: translate(0vmin,${-30+TA}vmin)
+          }
+          66% {
+            transform: translate(60vmin,${-30+TA}vmin)
+          }
+          100% {
+            transform: translate(60vmin,${TC-4}vmin)
+          }
+        }`;
+      case 'BA':
+        return `
+        @keyframes move${from+to} {
+          0% {
+            transform: translate(30vmin,${0}vmin)
+          }
+          33% {
+            transform: translate(30vmin,${-30+TB}vmin)
+          }
+          66% {
+            transform: translate(0vmin,${-30+TB}vmin)
+          }
+          100% {
+            transform: translate(0vmin,${TA-4}vmin)
+          }
+        }`;
+      case 'BC':
+        return `
+        @keyframes move${from+to} {
+          0% {
+            transform: translate(30vmin,${0}vmin)
+          }
+          33% {
+            transform: translate(30vmin,${-30+TB}vmin)
+          }
+          66% {
+            transform: translate(60vmin,${-30+TB}vmin)
+          }
+          100% {
+            transform: translate(60vmin,${TC-4}vmin)
+          }
+        }`;
+      case 'CA':
+        return `
+        @keyframes move${from+to} {
+          0% {
+            transform: translate(60vmin,${0}vmin)
+          }
+          33% {
+            transform: translate(60vmin,${-30+TC}vmin)
+          }
+          66% {
+            transform: translate(0vmin,${-30+TC}vmin)
+          }
+          100% {
+            transform: translate(0vmin,${TA-4}vmin)
+          }
+        }`;
+      case 'CB':
+        return `
+        @keyframes move${from+to} {
+          0% {
+            transform: translate(60vmin,${0}vmin)
+          }
+          33% {
+            transform: translate(60vmin,${-30+TC}vmin)
+          }
+          66% {
+            transform: translate(30vmin,${-30+TC}vmin)
+          }
+          100% {
+            transform: translate(30vmin,${TB-4}vmin)
+          }
+        }`;
+      default:
+    }
+  }
+
+  moveDiskAnimation(disk, from, to) {
+    let element = document.getElementById('t'+disk);
+
+    let TA = (this.state.towerA *4)
+    let TB = (this.state.towerA *4)
+    let TC = (this.state.towerA *4)
+    let style = document.createElement('style');
+    style.type = 'text/css';
+    
+    style.innerHTML = this.style(from,to,TA,TB,TC);
+    document.getElementsByTagName('head')[0].appendChild(style);
+
+    element.style.animation = 'move'+from+to+' 3s';
+
+
+    switch(from + to) {
+      case 'AB':
+        element.style.transform = 'translate(30vmin,'+(TB-4)+'vmin)';
         break;
       case 'AC':
-        element.style.transform = 'translate(60vmin,0vmin) ';
+        element.style.transform = 'translate(60vmin,'+(TC-4)+'vmin) ';
         break;
       case 'BA':
-        element.style.transform = 'translate(0vmin,0vmin) ';
+        element.style.transform = 'translate(0vmin,'+(TA-4)+'vmin) ';
         break;
       case 'BC':
-        element.style.transform = 'translate(60vmin,0vmin) ';
+        element.style.transform = 'translate(60vmin,'+(TC-4)+'vmin) ';
         break;
       case 'CA':
-        element.style.transform = 'translate(0vmin,0vmin) ';
+        element.style.transform = 'translate(0vmin,'+(TA-4)+'vmin) ';
         break;
       case 'CB':
-        element.style.transform = 'translate(30vmin,0vmin) ';
+        element.style.transform = 'translate(30vmin,'+(TB-4)+'vmin) ';
         break;
+      default:
     }
   }
 

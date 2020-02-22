@@ -121,7 +121,7 @@ input[type=text] {
 }
 
 /* Movement animation from A to B */
-@keyframes moveAB {
+@keyframes moveABS {
   0% {
     transform: translate(0vmin,0vmin)
   }
@@ -137,7 +137,7 @@ input[type=text] {
 }
 
 /* Movement animation from A to C */
-@keyframes moveAC {
+@keyframes moveACS {
   0% {
     transform: translate(0vmin,0vmin)
   }
@@ -153,7 +153,7 @@ input[type=text] {
 }
 
 /* Movement animation from B to A */
-@keyframes moveBA {
+@keyframes moveBAS {
   0% {
     transform: translate(30vmin,0vmin)
   }
@@ -169,7 +169,7 @@ input[type=text] {
 }
 
 /* Movement animation from B to C */
-@keyframes moveBC {
+@keyframes moveBCS {
   0% {
     transform: translate(30vmin,0vmin)
   }
@@ -185,7 +185,7 @@ input[type=text] {
 }
 
 /* Movement animation from C to A */
-@keyframes moveCA {
+@keyframes moveCAS {
   0% {
     transform: translate(60vmin,0vmin)
   }
@@ -201,7 +201,7 @@ input[type=text] {
 }
 
 /* Movement animation from C to B */
-@keyframes moveCB {
+@keyframes moveCBS {
   0% {
     transform: translate(60vmin,0vmin)
   }
