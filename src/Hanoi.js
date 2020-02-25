@@ -60,7 +60,7 @@ class Hanoi extends Component {
             });
         },
         (error)=>{
-            this.setState({error, isLoading: false});
+            this.setState({error});
         }
     )
   }
@@ -103,10 +103,10 @@ class Hanoi extends Component {
             transform: translate(0vmin,${0}vmin)
           }
           33% {
-            transform: translate(0vmin,${-34+TA}vmin)
+            transform: translate(0vmin,${-30+TA}vmin)
           }
           66% {
-            transform: translate(30vmin,${-34+TA}vmin)
+            transform: translate(30vmin,${-30+TA}vmin)
           }
           100% {
             transform: translate(30vmin,${TB}vmin)
@@ -197,11 +197,13 @@ class Hanoi extends Component {
   }
 
   moveDiskAnimation(disk, from, to) {
+    let towers = this.towerCounter(from, to)
+    let TA = towers.towerA *4
+    let TB = towers.towerB *4
+    let TC = towers.towerC *4
+
     let element = document.getElementById('t'+disk);
 
-    let TA = (this.state.towerA *4)
-    let TB = (this.state.towerA *4)
-    let TC = (this.state.towerA *4)
     let style = document.createElement('style');
     style.type = 'text/css';
     
@@ -210,25 +212,26 @@ class Hanoi extends Component {
 
     element.style.animation = 'move'+from+to+' 3s';
 
+    alert('TA: '+TA+' TB: '+TB+' TC: '+TC)
 
     switch(from + to) {
       case 'AB':
-        element.style.transform = 'translate(30vmin,'+(TB-4)+'vmin)';
+        element.style.transform = 'translate(30vmin,'+(TB)+'vmin)';
         break;
       case 'AC':
-        element.style.transform = 'translate(60vmin,'+(TC-4)+'vmin) ';
+        element.style.transform = 'translate(60vmin,'+(TC)+'vmin) ';
         break;
       case 'BA':
-        element.style.transform = 'translate(0vmin,'+(TA-4)+'vmin) ';
+        element.style.transform = 'translate(0vmin,'+(TA)+'vmin) ';
         break;
       case 'BC':
-        element.style.transform = 'translate(60vmin,'+(TC-4)+'vmin) ';
+        element.style.transform = 'translate(60vmin,'+(TC)+'vmin) ';
         break;
       case 'CA':
-        element.style.transform = 'translate(0vmin,'+(TA-4)+'vmin) ';
+        element.style.transform = 'translate(0vmin,'+(TA)+'vmin) ';
         break;
       case 'CB':
-        element.style.transform = 'translate(30vmin,'+(TB-4)+'vmin) ';
+        element.style.transform = 'translate(30vmin,'+(TB)+'vmin) ';
         break;
       default:
     }
@@ -237,40 +240,71 @@ class Hanoi extends Component {
   async simulation(n) {
     let m = this.state.movements
     let i = this.state.i
-   
+    
     this.moveDiskAnimation(m[i].disk, m[i].source, m[i].destination)
     // this.moveDisk(m[i].disk, m[i].source, m[i].destination)
-    this.towerCounter(m[i].source, m[i].destination)
+    //this.towerCounter(m[i].source, m[i].destination)
     this.setState({ i: i + 1 });
   }
 
   towerCounter(from, to) {
     const { towerA, towerB, towerC } = this.state
-      switch(from) {
-        case 'A':
+
+      switch(from+to) {
+        case 'AB':
           this.setState({ towerA: towerA - 1})
-          break;
-        case 'B':
-          this.setState({ towerB: towerB - 1})
-          break;
-        case 'C':
-          this.setState({ towerC: towerC - 1})
-          break;
-        default:
-          // code block
-      }
-      switch(to) {
-        case 'A':
-          this.setState({ towerA: towerA + 1})
-          break;
-        case 'B':
           this.setState({ towerB: towerB + 1})
-          break;
-        case 'C':
+          return {
+            towerA: towerA - 1,
+            towerB: towerB + 1,
+            towerC: towerC
+          }
+        case 'AC':
+          this.setState({ towerA: towerA - 1})
           this.setState({ towerC: towerC + 1})
-          break;
+          return {
+            towerA: towerA - 1,
+            towerB: towerB,
+            towerC: towerC + 1
+          }
+        case 'BA':
+          this.setState({ towerB: towerB - 1})
+          this.setState({ towerA: towerA + 1})
+          return {
+            towerA: towerA + 1,
+            towerB: towerB - 1,
+            towerC: towerC
+          }
+        case 'BC':
+          this.setState({ towerB: towerB - 1})
+          this.setState({ towerC: towerC + 1})
+          return {
+            towerA: towerA,
+            towerB: towerB - 1,
+            towerC: towerC + 1
+          }
+        case 'CA':
+          this.setState({ towerC: towerC - 1})
+          this.setState({ towerA: towerA + 1})
+          return {
+            towerA: towerA + 1,
+            towerB: towerB,
+            towerC: towerC -1
+          }
+        case 'CB':
+          this.setState({ towerC: towerC - 1})
+          this.setState({ towerB: towerB + 1})
+          return {
+            towerA: towerA,
+            towerB: towerB + 1,
+            towerC: towerC - 1
+          }
         default:
-          // code block
+          return {
+            towerA: towerA,
+            towerB: towerB,
+            towerC: towerC
+          }
       }
   }
 
@@ -278,7 +312,7 @@ class Hanoi extends Component {
     const {movements, disks, i, towerA, towerB, towerC, isLoading} = this.state;
 
     if (isLoading) {
-      return <p>Loading...</p>;
+      return <div className="loader"></div>;
     }
 
     const Controls = 
